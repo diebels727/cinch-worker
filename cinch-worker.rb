@@ -16,8 +16,8 @@ end
 IRC::Config.server = 'irc.freenode.org'
 IRC::Config.channel = '#cinch-bots'
 IRC::Config.channels = [IRC::Config.channel]
-IRC::Config.nick = 'undulatedLo'
-IRC::Config.user = '2lokey'
+IRC::Config.nick = Faker::Internet.user_name
+IRC::Config.user = Faker::Internet.email
 
 class LoggerPlugin
   include Cinch::Plugin
