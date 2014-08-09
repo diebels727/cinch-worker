@@ -2,6 +2,7 @@
 
 require 'cinch'
 require 'fileutils'
+require 'ffaker'
 require 'pry'
 
 module IRC
