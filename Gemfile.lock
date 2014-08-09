@@ -1,0 +1,14 @@
+PATH
+  remote: vendor/cinch
+  specs:
+    cinch (2.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cinch!
