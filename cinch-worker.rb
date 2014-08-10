@@ -4,6 +4,7 @@ require 'cinch'
 require 'fileutils'
 require 'ffaker'
 require 'optparse'
+require 'tempfile'
 require 'pry'
 
 options = {}
@@ -20,6 +21,12 @@ OptionParser.new do |opts|
     else
       options[:channel] = "##{c}"
     end
+  end
+  opts.on("--silent","Run silently") do
+    options[:silent] = true
+  end
+  opts.on("--output","Direct output to outfile") do
+    options[:output] = true
   end
 end.parse!
 
@@ -84,6 +91,20 @@ bot = Cinch::Bot.new do
     c.channels = IRC::Config.channels
     c.plugins.plugins = [LoggerPlugin]
   end
+end
+
+if options[:silent]
+  loggers = Cinch::LoggerList.new
+  bot.loggers = loggers
+end
+
+if options[:output]
+  if !Dir.exists?(IRC::Config.server + "/" + IRC::Config.channel)
+    FileUtils.mkpath(IRC::Config.server+"/"+IRC::Config.channel)
+  end
+  name = Time.now.strftime("%Y%m%d")
+  filename = "#{IRC::Config.server}\/#{IRC::Config.channel}\/#{name}.output"
+  bot.loggers << Cinch::Logger::FormattedLogger.new(File.new(filename,'a'))
 end
 
 bot.start
