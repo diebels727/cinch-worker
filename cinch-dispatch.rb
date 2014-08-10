@@ -17,10 +17,12 @@ get '/:server/:channel' do
   server = params[:server]
   channel = params[:channel]
   server.gsub!("-","\.")
-  pid = Process.spawn("cinch-worker.rb --server #{server} --channel #{channel} --output --silent")
-  lockfile = File.open("#{server}/#{channel}/lock",'w')
-  lockfile.puts(pid)
-  Process.detach(pid)
-  lockfile.close
+  if !File.exists?("#{server}/#{channel}/lock")
+    pid = Process.spawn("cinch-worker.rb --server #{server} --channel #{channel} --output --silent")
+    lockfile = File.open("#{server}/#{channel}/lock",'w')
+    lockfile.puts(pid)
+    Process.detach(pid)
+    lockfile.close
+  end
 end
 
