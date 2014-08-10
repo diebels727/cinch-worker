@@ -9,8 +9,7 @@ get '/:server/:channel' do
   channel = params[:channel]
   server.gsub!("-","\.")
   binding.pry
-  pid = Process.spawn("cinch-worker.rb --server #{server} --channel #{channel} --output --silent",
-                      :out => 'dev/null', :err => 'dev/null')
+  pid = Process.spawn("cinch-worker.rb --server #{server} --channel #{channel} --output --silent")
+  Process.detach(pid)
 
-  Process.detach
 end
