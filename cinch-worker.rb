@@ -28,12 +28,15 @@ OptionParser.new do |opts|
   opts.on("--output","Direct output to outfile") do
     options[:output] = true
   end
+  opts.on("-l","--log LOG","Log file name") do |l|
+    options[:log] = l
+  end
 end.parse!
 
 module IRC
   class Config
     class << self
-      attr_accessor :server,:channel,:channels,:nick,:user
+      attr_accessor :server,:channel,:channels,:nick,:user,:log
     end
   end
 end
@@ -43,6 +46,7 @@ IRC::Config.channel = options[:channel] #'#cinch-bots'
 IRC::Config.channels = [IRC::Config.channel]
 IRC::Config.nick = Faker::Internet.user_name
 IRC::Config.user = Faker::Internet.email
+IRC::Config.log = options[:log]
 
 class LoggerPlugin
   include Cinch::Plugin
@@ -54,7 +58,7 @@ class LoggerPlugin
   def initialize(*args)
     super
     @format = "%Y%m%d%H%M%S"
-    name = Time.now.strftime("%Y%m%d")
+    name = ::IRC::Config.log || Time.now.strftime("%Y%m%d")
     if !Dir.exists?(IRC::Config.server + "/" + IRC::Config.channel)
       FileUtils.mkpath(IRC::Config.server+"/"+IRC::Config.channel)
     end
