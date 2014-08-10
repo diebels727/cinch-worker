@@ -4,6 +4,8 @@ require 'sinatra'
 require 'fileutils'
 require 'pry'
 
+set :bind, '0.0.0.0'
+
 #do nothing
 get '/' do;end
 
