@@ -69,20 +69,18 @@ class LoggerPlugin
 
   def setup(*)
     time = Time.now.strftime(@format)
-    @logfile.puts("[#{time}]: Starting up ...")
   end
 
   def cleanup(*)
     @logfile.close
     time = Time.now.strftime(@format)
-    @logfile.puts("[#{time}]: Shutting down ...")
   end
 
   def log(msg)
     time = Time.now.strftime(@format)
     username = msg.user.name
     message = msg.message
-    @logfile.puts("[#{time}][#{username}][#{msg.prefix}]: #{message}")
+    @logfile.puts("{\"timestamp\": \"#{time}\",\"username\":\"#{username}\",\"prefix\":\"#{msg.prefix\",\"message\":\"#{message}\"")
     @logfile.flush #write messages immediately
   end
 end
